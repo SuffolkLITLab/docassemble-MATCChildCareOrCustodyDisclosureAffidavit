@@ -52,47 +52,11 @@ Scenario: Generated from variables.json
     | confidential_address_reasons['child_adopted'] | False |
     | confidential_address_reasons['other_reason'] | False |
     | confidential_address_reasons['None'] | True |
-    | custody_case_participation | participated |
-    | other_care_custody_proceedings.target_number | 1 |
-    | other_care_custody_proceedings[0].children | children |
-    | other_care_custody_proceedings[0].children[0] | children[0] |
-    | other_care_custody_proceedings[0].children[0].name | children[0].name |
-    | other_care_custody_proceedings[0].children[0].name.first | Cara |
-    | other_care_custody_proceedings[0].children[0].name.middle | Nell Knox |
-    | other_care_custody_proceedings[0].children[0].name.last | Conway |
-    | other_care_custody_proceedings[0].children[0].name.suffix | V |
-    | other_care_custody_proceedings[0].children[0].address | users[0].address |
-    | other_care_custody_proceedings[0].children[0].address.address | Et natus quod et et |
-    | other_care_custody_proceedings[0].children[0].address.unit | Tempore sint sed no |
-    | other_care_custody_proceedings[0].children[0].address.city | Officia neque maiore |
-    | other_care_custody_proceedings[0].children[0].address.state | MA |
-    | other_care_custody_proceedings[0].children[0].address.zip | 66778 |
-    | other_care_custody_proceedings[0].children[0].address.country | US |
-    | other_care_custody_proceedings[0].children[0].address.start_date | 2008 |
-    | other_care_custody_proceedings[0].children[0].previous_addresses | children[0].previous_addresses |
-    | other_care_custody_proceedings[0].children[0].other_addresses | children[0].other_addresses |
-    | other_care_custody_proceedings[0].children[0].mailing_address | children[0].mailing_address |
-    | other_care_custody_proceedings[0].children[0].service_address | children[0].service_address |
-    | other_care_custody_proceedings[0].children[0].previous_names | children[0].previous_names |
-    | other_care_custody_proceedings[0].children[0].aliases | children[0].aliases |
-    | other_care_custody_proceedings[0].children[0].preferred_name | children[0].preferred_name |
-    | other_care_custody_proceedings[0].children[0].gals | children[0].gals |
-    | other_care_custody_proceedings[0].children[0].has_gal | False |
-    | other_care_custody_proceedings[0].children[0].lives_with | Ad ea veritatis exerasd |
-    | other_care_custody_proceedings[0].children[0].relationship | Commodo nobis accusa |
-    | other_care_custody_proceedings[0].children[0].too_many_previous_addresses | False |
-    | other_care_custody_proceedings[0].case_status | care and protection |
-    | other_care_custody_proceedings[0].docket_number | 258 |
-    | other_care_custody_proceedings[0].is_open | True |
-    | other_care_custody_proceedings[0].non_ma_court | False |
-    | other_care_custody_proceedings[0].other_party_types['dcf'] | False |
-    | other_care_custody_proceedings[0].other_party_types['other'] | False |
-    | other_care_custody_proceedings[0].other_party_types['None'] | True |
-    | other_care_custody_proceedings[0].court_name | Tate Bauer |
-    | other_care_custody_proceedings[0].user_role | W |
-    | other_care_custody_proceedings[0].put_on_appendix | False |
+    | custody_case_participation | no cases |
+    | other_care_custody_proceedings.target_number | 0 |
     | attorneys.target_number | 0 |
-
+    | courts[0] | Boston Municipal Court - Central Division |
+    | trial_court_name | Boston Municipal Court - Central Division |
 
 Scenario: Generated from YAML
   Given I start the interview at "main_childcare_or_custody_disclosure_affidavit.yml"
@@ -151,8 +115,6 @@ Scenario: Generated from YAML
     | users[0].states_above_true['states_true'] | True |
     | users[0].marital_status | married |
     | users[0].has_spouse | True |
-    | trial_court_name | Sample answer |
-    | appeals_court_name | Sample answer |
     | signature_choice | this_device |
     | signature_wait_screen | Sample answer |
     | text_link | True |
@@ -194,18 +156,7 @@ Scenario: Generated from YAML
     | children[0].address.city | Boston |
     | children[0].address.state | MA |
     | children[0].address.zip | 02108 |
-    | children[0].previous_addresses.there_are_any | True |
-    | children[0].previous_addresses[0] | Sample answer |
-    | children[0].previous_addresses[0].start_date | Sample answer |
-    | children[0].previous_addresses[0].end_date | Sample answer |
-    | children[0].previous_addresses[0].address | Sample answer |
-    | children[0].previous_addresses[0].unit | Sample answer |
-    | children[0].previous_addresses[0].city | Sample answer |
-    | children[0].previous_addresses[0].state | MA |
-    | children[0].previous_addresses[0].zip | Sample answer |
-    | children[0].previous_addresses[0].country | US |
-    | children[0].previous_addresses[0].lived_with | Sample answer |
-    | children[0].previous_addresses[0].relationship | Sample answer |
+    | children[0].previous_addresses.there_are_any | False |
     | confidential_address_reasons['has_209a'] | True |
     | confidential_address_reasons['dv_shelter'] | False |
     | confidential_address_reasons['danger_abuse'] | False |
@@ -222,40 +173,8 @@ Scenario: Generated from YAML
     | signing_attorney.address.state | MA |
     | signing_attorney.address.zip | 02108 |
     | signing_attorney.address.unit | Sample answer |
-    | custody_case_participation | participated |
-    | other_care_custody_proceedings[0].case_status | a 209A restraining order |
-    | other_care_custody_proceedings[0].non_ma_court | True |
-    | other_care_custody_proceedings[0].court_name | Sample answer |
-    | other_care_custody_proceedings[0].docket_number | Sample answer |
-    | other_care_custody_proceedings[0].children | A |
-    | other_care_custody_proceedings[0].user_role | W |
-    | other_care_custody_proceedings[0].other_party_types['dcf'] | True |
-    | other_care_custody_proceedings[0].other_party_types['other'] | False |
-    | other_care_custody_proceedings[0].is_open | True |
-    | other_care_custody_proceedings[0].other_parties[0] | Sample answer |
-    | other_care_custody_proceedings[0].other_parties[0].name.first | Jane |
-    | other_care_custody_proceedings[0].other_parties[0].name.middle | Sample answer |
-    | other_care_custody_proceedings[0].other_parties[0].name.last | Smith |
-    | other_care_custody_proceedings[0].other_parties[0].name.suffix | Jr. |
-    | other_care_custody_proceedings[0].other_parties[0].address.address | 123 Main St |
-    | other_care_custody_proceedings[0].other_parties[0].address.city | Boston |
-    | other_care_custody_proceedings[0].other_parties[0].address.state | MA |
-    | other_care_custody_proceedings[0].other_parties[0].address.zip | 02108 |
-    | other_care_custody_proceedings[0].atty_for_user | True |
-    | other_care_custody_proceedings[0].atty_for_user_name | Sample answer |
-    | other_care_custody_proceedings[0].atty_for_children | True |
-    | other_care_custody_proceedings[0].atty_for_children_name | Sample answer |
-    | other_care_custody_proceedings[0].attorneys_for_children[0].name.first | Jane |
-    | other_care_custody_proceedings[0].attorneys_for_children[0].name.middle | Sample answer |
-    | other_care_custody_proceedings[0].attorneys_for_children[0].name.last | Smith |
-    | other_care_custody_proceedings[0].attorneys_for_children[0].name.suffix | Jr. |
-    | other_care_custody_proceedings[0].attorneys_for_children[0].represented_children | Sample answer |
-    | children[0].has_gal | Sample answer |
-    | children[0].gals[0].name.first | Jane |
-    | children[0].gals[0].name.middle | Sample answer |
-    | children[0].gals[0].name.last | Smith |
-    | children[0].gals[0] | Sample answer |
-    | children[0].gals[0].role | atty |
+    | custody_case_participation | no cases |
+    | children[0].has_gal | False |
     | esign | True |
     | attorneys.there_are_any | True |
     | attorneys.is_petitioner_minor_or_incompetent | True |
@@ -271,3 +190,5 @@ Scenario: Generated from YAML
     | other_care_custody_proceedings.there_are_any | no cases |
     | download | Sample answer |
     | intro | True |
+    | courts[0] | Boston Municipal Court - Central Division |
+    | trial_court_name | Boston Municipal Court - Central Division |

@@ -14,6 +14,7 @@ code: |
 ---
 code: |
   children_of_both = children
+
 ---
 objects:
   - other_care_custody_proceedings: OtherProceedingList
@@ -107,10 +108,13 @@ code: |
   set_signing_attorney = True
 ---
 code: |
-  if form_filled_by_attorney:
+  attorney_signs_for_party = attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent
+  if attorney_signs_for_party:
     party_name_attorney = str(users[0])
+    party_name_no_attorney = ""
     has_attorney = True
   else:
+    party_name_attorney = ""
     party_name_no_attorney = str(users[0])
     no_attorney = True
 
@@ -124,7 +128,68 @@ code: |
 ---
 #################### Override Blocks Start #####################
 ---
+# Will be defined differently in some parent interviews
+code: |
+  children_of_both = children
+---
 #################### Question Blocks Start #####################
+---  
+id: name of other party
+question: |
+  What is the name of your children's other parent?
+fields:
+  - First name: other_parties[0].name.first
+  - Middle: other_parties[0].name.middle
+    required: False
+  - Last: other_parties[0].name.last
+  - Suffix: other_parties[0].name.suffix
+    required: False
+    code: |
+      name_suffix()
+---    
+id: children names without birthdate
+question: |
+  Tell us about the children you have with ${other_parties.familiar()}  
+subquestion: |
+  List all of your children who are part of your new case. Usually,
+  this is all of your children with ${other_parties.familiar()}
+  who are under the age of 18.
+  
+  Click "${word("Add another")}" to add more.
+list collect: True
+fields:
+  - First Name: children[i].name.first
+  - Middle Name: children[i].name.middle
+    required: False
+  - Last Name: children[i].name.last
+  - Suffix: children[i].name.suffix
+    required: False
+    code: |
+      name_suffix()
+---
+code: |
+  users[i].name.first
+  users[i].complete = True
+---
+code: |
+  children[i].name.first
+  children[i].complete = True
+---
+code: |
+  other_parties[i].name.first
+  other_parties[i].complete = True
+---
+code: |
+  other_care_custody_proceedings[i].other_parties[j].name.first
+  other_care_custody_proceedings[i].other_parties[j].complete = True
+---
+code: |
+  children[i].gals[j].name.first
+  children[i].gals[j].complete = True
+---
+code: |
+  other_care_custody_proceedings[i].attorneys_for_children[j].name.first
+  other_care_custody_proceedings[i].attorneys_for_children[j].complete = True
 ---
 sets:
   - children[i].address.address
@@ -287,16 +352,17 @@ fields:
   - code: other_parties[i].name_fields()
 ---
 code: |
-  if 'District' in trial_court.name:
-    trial_court.division_district_court = trial_court.division
-  elif 'Superior' in trial_court.name:
-    trial_court.division_superior_court = trial_court.division
-  elif 'Juvenile' in trial_court.name:
-    trial_court.division_juvenile_court = trial_court.division
-  elif 'Probate' in trial_court.name:
-    trial_court.division_family_court = trial_court.division
-  elif 'Municipal' in trial_court.name: 
-    trial_court.division_bmc = trial_court.division
+  # court_name = getattr(trial_court, 'name', '') or ''
+  # if 'District' in court_name:
+  #   trial_court.division_district_court = getattr(trial_court, 'division', '')
+  # elif 'Superior' in court_name:
+  #   trial_court.division_superior_court = getattr(trial_court, 'division', '')
+  # elif 'Juvenile' in court_name:
+  #   trial_court.division_juvenile_court = getattr(trial_court, 'division', '')
+  # elif 'Probate' in court_name:
+  #   trial_court.division_family_court = getattr(trial_court, 'division', '')
+  # elif 'Municipal' in court_name: 
+  #   trial_court.division_bmc = getattr(trial_court, 'division', '')
   fill_in_court_name = True
 ---
 code: |
@@ -1103,11 +1169,11 @@ attachment:
     # - "user_address_on_one_line__2": ${ users[0].address.on_one_line(include_unit=True) }
     - "case_name": ${ case_name }
     - "docket_number": ${ showifdef('docket_numbers[0]') }
-    - "court_department_bmc": ${ trial_court.department == "Boston Municipal Court" }
-    - "court_department_district_court": ${ trial_court.department == "District Court" }
-    - "court_department_juvenile_court": ${ trial_court.department == "Juvenile Court" }
-    - "court_department_family_court": ${ trial_court.department == "Probate and Family Court" }
-    - "court_department_superior_court": ${ trial_court.department == "Superior Court" }
+    - "court_department_bmc": ${ getattr(trial_court, 'department', '') == "Boston Municipal Court" }
+    - "court_department_district_court": ${ getattr(trial_court, 'department', '') == "District Court" }
+    - "court_department_juvenile_court": ${ getattr(trial_court, 'department', '') == "Juvenile Court" }
+    - "court_department_family_court": ${ getattr(trial_court, 'department', '') == "Probate and Family Court" }
+    - "court_department_superior_court": ${ getattr(trial_court, 'department', '') == "Superior Court" }
     # - "child1_name_last_first": ${ children_of_both.item(0).name.lastfirst() }
     # - "child2_name_last_first": ${ children_of_both.item(1).name.lastfirst() }
     # - "child3_name_last_first": ${ children_of_both.item(2).name.lastfirst() }
@@ -1348,7 +1414,7 @@ attachment:
     - "not_signer_is_attorney": ${ not attorneys.there_are_any or not attorneys.is_petitioner_minor_or_incompetent} 
     - "signer_is_attorney": ${ attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent}
     - "signer_is_attorney_1": ${ attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent}
-    - "trial_court_division": ${ trial_court.division }
+    - "trial_court_division": ${ getattr(trial_court, 'division', '') }
     - "users1_address_block": ${ users[0].address.block() }
     - "users1_address_on_one_line_1": ${ users[0].address.on_one_line(include_unit=True) }
     - "users1_email": ${ users[0].email }
@@ -1369,7 +1435,7 @@ attachment:
             % if attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent and esign:
             /s/${ attorneys[0] }
             % endif
-    - "trial_court_division": ${ trial_court.division }
+    - "trial_court_division": ${ getattr(trial_court, 'division', '') }
     - "party_name_attorney": ${ party_name_attorney }
     - "party_name_no_attorney": ${ party_name_no_attorney }
     - "attorneys1_bbo": |

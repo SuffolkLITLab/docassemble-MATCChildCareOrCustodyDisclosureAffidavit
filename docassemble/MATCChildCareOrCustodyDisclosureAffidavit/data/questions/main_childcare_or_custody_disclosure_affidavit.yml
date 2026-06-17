@@ -139,9 +139,6 @@ objects:
   - attorneys: ALPeopleList.using(complete_attribute="complete")
   - other_parties: ALPeopleList.using(there_are_any=False)
 ---
-code: |
-  children_of_both = children
----
 id: intro
 continue button field: intro
 question: |
@@ -162,47 +159,6 @@ subquestion: |
   party, or your children, and
   * the address and contact information for you, the other
   party, and your children
----  
-id: name of other party
-question: |
-  What is the name of your children's other parent?
-fields:
-  - First name: other_parties[0].name.first
-  - Middle: other_parties[0].name.middle
-    required: False
-  - Last: other_parties[0].name.last
-  - Suffix: other_parties[0].name.suffix
-    required: False
-    code: |
-      name_suffix()
----    
-id: children names without birthdate
-question: |
-  Tell us about the children you have with ${other_parties.familiar()}  
-subquestion: |
-  List all of your children who are part of your new case. Usually,
-  this is all of your children with ${other_parties.familiar()}
-  who are under the age of 18.
-  
-  Click "${word("Add another")}" to add more.
-list collect: True
-fields:
-  - First Name: children[i].name.first
-  - Middle Name: children[i].name.middle
-    required: False
-  - Last Name: children[i].name.last
-  - Suffix: children[i].name.suffix
-    required: False
-    code: |
-      name_suffix()
----
-code: |
-  users[i].name.first
-  users[i].complete = True
----
-code: |
-  children[i].name.first
-  children[i].complete = True
 ---
 event: download
 id: download
