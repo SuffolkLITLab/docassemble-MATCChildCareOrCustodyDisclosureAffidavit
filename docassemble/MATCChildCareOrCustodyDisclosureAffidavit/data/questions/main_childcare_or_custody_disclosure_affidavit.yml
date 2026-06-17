@@ -6,7 +6,7 @@ include:
 ---
 metadata:
   title: |
-    Child Care or Custody Disclosure Affidavit
+    Affidavit Disclosing Care or Custody Proceedings
   short title: |
     Child Care or Custody Disclosure
   description: |
@@ -19,6 +19,8 @@ metadata:
     * The names of attorneys, guardians ad litem, or other people who are involved in those cases
 
     The form that this interview makes may already be included in other interviews on this site.
+
+    This form is also called "Affidavit Disclosing Care or Custody Proceedings".
   can_I_use_this_form: |
     If you are asking a judge to make a decision about the custody or guardianship of a child,
     the judge needs to know about any **other** cases involving the child. This helps the judge
@@ -69,20 +71,46 @@ code: |
       "Juvenile Court",
       ]
 ---
+code: |
+  github_repo_name = 'docassemble-MATCChildCareOrCustodyDisclosureAffidavit'
+---
+code: |
+  interview_short_title = "Tell the court about any cases or proceedings about the care and custody of a minor"
+---
+code: |
+  al_form_type = "other"
+---
+sections:
+  - section_intro: Introduction
+  - section_about_you: About you
+  - section_children: Children
+  - section_other_cases: Other cases
+  - section_addresses: Addresses
+  - section_download: Review and download
+---
 id: interview order
 mandatory: True
 code: |
   set_preconditions
   al_intro_screen
+  nav.set_section("section_intro")
   affidavit_disclosing_care_or_custody_intro
   intro
+  nav.set_section("section_about_you")
   users[0].name.first
   user_needs_interpreter
   other_parties[0].name.first
   confidential_address_reasons
   other_care_custody_proceedings.there_are_any =  custody_case_participation != "no cases"
 
-  interview_order_affidavit_disclosing_care_or_custody
+  nav.set_section("section_children")
+  interview_order_affidavit_disclosing_care_or_custody_children
+
+  nav.set_section("section_other_cases")
+  interview_order_affidavit_disclosing_care_or_custody_cases
+
+  nav.set_section("section_addresses")
+  interview_order_affidavit_disclosing_care_or_custody_addresses
 
   trigger_aff_care_or_custody_computed_variables
   users[0].address.geolocate()
@@ -90,6 +118,7 @@ code: |
   trial_court
   fill_in_court_name
   users[0].mobile_number
+  nav.set_section("section_download")
   download
 # ---
 # code: |
@@ -178,6 +207,19 @@ code: |
 event: download
 id: download
 question: |
-  All done
+  Your form is ready to download!
 subquestion: |
+  Your Child Care or Custody Disclosure Affidavit is complete. 
+  
+  **What to do next:**
+  
+  1. **Download** or **Email** the packet to yourself using the links below.
+  2. **Review** the forms to make sure all information is correct.
+  3. **Sign** the document where indicated.
+  4. **File** the affidavit at the appropriate Probate and Family Court.
+
+  > Make sure to read the **"Next Steps"** document included in your packet for detailed instructions on how to file and serve the other party.
+  
   ${ al_user_bundle.download_list_html() }
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }

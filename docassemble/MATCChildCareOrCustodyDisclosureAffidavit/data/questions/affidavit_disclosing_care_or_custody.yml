@@ -13,15 +13,6 @@ code: |
   AL_DEFAULT_STATE = "MA"
 ---
 code: |
-  github_repo_name = 'docassemble-CLAGuardianship'
----
-code: |
-  interview_short_title = "Tell the court about any cases or proceedings about the care and custody of a minor"
----
-code: |
-  al_form_type = "other"
----
-code: |
   children_of_both = children
 ---
 objects:
@@ -34,9 +25,8 @@ objects:
   - attorneys_for_parents: ALPeopleList.using(auto_gather=False)
   - children[i].gals: ALPeopleList.using(ask_number=True)
 ---
-id: interview_order_affidavit_disclosing_care_or_custody
+id: interview_order_affidavit_disclosing_care_or_custody_children
 code: |
-
   affidavit_disclosing_care_or_custody_intro
   attorneys.gather()
   children.there_are_any = True
@@ -45,7 +35,10 @@ code: |
   # explain_addresses_of_children  # Take out for standalone
 
   confidential_address
-
+  interview_order_affidavit_disclosing_care_or_custody_children = True
+---
+id: interview_order_affidavit_disclosing_care_or_custody_cases
+code: |
   has_participated_custody_case
   other_care_custody_proceedings.gather()
   for child in children:
@@ -54,7 +47,10 @@ code: |
 
   impound_affidavit
   day
-
+  interview_order_affidavit_disclosing_care_or_custody_cases = True
+---
+id: interview_order_affidavit_disclosing_care_or_custody_addresses
+code: |
   if form_filled_by_attorney:
     if (al_person_answering == "minor") or (al_person_answering == "interested_party" and needs_attorney_signature):
       set_signing_attorney
@@ -77,6 +73,14 @@ code: |
     need_past_address_appendix
 
   need_other_parties_appendix
+  interview_order_affidavit_disclosing_care_or_custody_addresses = True
+---
+id: interview_order_affidavit_disclosing_care_or_custody
+code: |
+
+  interview_order_affidavit_disclosing_care_or_custody_children
+  interview_order_affidavit_disclosing_care_or_custody_cases
+  interview_order_affidavit_disclosing_care_or_custody_addresses
 
   interview_order_affidavit_disclosing_care_or_custody = True  
 ---
@@ -1010,6 +1014,7 @@ progress: 100
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
+      child_care_or_custody_disclosure_affidavit_next_steps,
       affidavit_of_care_or_custody_attachment
       ],
       filename="child_care_or_custody_affidavit",
@@ -1018,6 +1023,12 @@ objects:
       )
 ---
 objects:
+  - child_care_or_custody_disclosure_affidavit_next_steps:
+      ALDocument.using(filename="child_care_or_custody_disclosure_affidavit_next_steps",
+      title="Next Steps",
+      enabled=True,
+      has_addendum=False
+      )
   - affidavit_of_care_or_custody_attachment:
       ALDocument.using(filename="child_care_or_custody_affidavit",
       title="Child Care or Custody Affidavit",
@@ -1053,6 +1064,12 @@ code: |
 
   affidavit_of_care_or_custody_attachment.overflow_fields.gathered = True
 ---
+attachment:
+  name: Next Steps
+  filename: child_care_or_custody_disclosure_affidavit_next_steps
+  variable name: child_care_or_custody_disclosure_affidavit_next_steps[i]
+  docx template file: child_care_or_custody_disclosure_affidavit_next_steps.docx
+---
 need: need_other_parties_appendix
 attachment:
   variable name: affidavit_of_care_or_custody_attachment.addendum
@@ -1068,6 +1085,7 @@ attachment:
   # editable: False
   pdf template file: affidavit_disclosing_care_or_custody.pdf
   decimal places: 2
+  editable: False
   fields:
     # - "user_name_full": ${ str(users[0]) }
     - "child1_address_on_one_line": ${ children_of_both.item(0).address.on_one_line(include_unit=True) if not confidential_address else ''}
