@@ -1,0 +1,27 @@
+[build-system]
+requires = [
+    "setuptools==80.9.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docassemble.MATCChildCareOrCustodyDisclosureAffidavit"
+version = "0.0.1"
+description = "Massachusetts Trial Court Childcare or Custody Disclosure Affidavit"
+readme = "README.md"
+authors = [
+    { name = "Quinten Steenhuis", email = "quinten@lemmalegal.com" },
+]
+dependencies = []
+license = "MIT"
+license-files = [
+    "LICENSE",
+]
+
+[project.urls]
+Homepage = "https://courtformsonline.org"
+
+[tool.setuptools.packages.find]
+where = [
+    ".",
+]
