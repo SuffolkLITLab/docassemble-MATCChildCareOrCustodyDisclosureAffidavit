@@ -1,12 +1,13 @@
 from typing import Optional
-from docassemble.base.util import (
+from docassemble.base.util import (  # type: ignore[import-untyped]
     DAObject,
     DAList,
     comma_and_list,
     validation_error,
     word,
 )
-from docassemble.AssemblyLine.al_general import *
+from docassemble.AssemblyLine.al_general import *  # type: ignore[import-untyped]
+from docassemble.AssemblyLine.al_general import ALIndividual, ALPeopleList, PeopleList  # type: ignore[import-untyped]
 import re
 
 __all__ = [

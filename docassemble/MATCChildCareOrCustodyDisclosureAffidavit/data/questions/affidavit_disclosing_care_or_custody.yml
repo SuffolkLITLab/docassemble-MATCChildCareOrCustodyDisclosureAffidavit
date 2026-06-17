@@ -1366,18 +1366,13 @@ continue button field: affidavit_disclosing_care_or_custody_intro
 question: |
   Child Care or Custody Disclosure Affidavit
 subquestion: |
-  Before making a decision that affects who takes care of ${ children.familiar() }, 
+  Before making a decision that affects who takes care of the child or children, 
   the court needs to know about any
-  other cases involving the care or custody of 
-  % if (al_person_answering == 'parent'):
-  your children. This includes cases where you, another parent, or someone else 
+  other cases involving their care or custody. 
+  
+  This includes cases where you, a parent, or someone else 
   has been involved in a court case about the care or custody of 
-  ${ children.familiar() }.
-  % else:
-  ${ children.familiar() }. This includes cases where you, 
-  ${ children.familiar() }'s parents, or someone else has been involved in a
-  court case about the care or custody of ${ children.familiar() }.
-  % endif
+  the child or children.
 ---
 code: |
   # Trigger computed values

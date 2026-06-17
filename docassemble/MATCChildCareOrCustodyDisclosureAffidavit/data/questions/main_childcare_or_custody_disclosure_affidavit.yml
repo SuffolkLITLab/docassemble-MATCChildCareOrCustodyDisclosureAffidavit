@@ -74,6 +74,7 @@ mandatory: True
 code: |
   set_preconditions
   al_intro_screen
+  affidavit_disclosing_care_or_custody_intro
   intro
   users[0].name.first
   user_needs_interpreter
@@ -169,6 +170,10 @@ fields:
 code: |
   users[i].name.first
   users[i].complete = True
+---
+code: |
+  children[i].name.first
+  children[i].complete = True
 ---
 event: download
 id: download
