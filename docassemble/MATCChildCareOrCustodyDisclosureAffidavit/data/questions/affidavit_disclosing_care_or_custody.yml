@@ -1102,6 +1102,7 @@ attachment:
     # - "child3_address_city_state_zip": ${ children_of_both.item(2).address.line_two() }
     # - "user_address_on_one_line__2": ${ users[0].address.on_one_line(include_unit=True) }
     - "case_name": ${ case_name }
+    - "docket_number": ${ showifdef('docket_numbers[0]') }
     - "court_department_bmc": ${ trial_court.department == "Boston Municipal Court" }
     - "court_department_district_court": ${ trial_court.department == "District Court" }
     - "court_department_juvenile_court": ${ trial_court.department == "Juvenile Court" }
@@ -1118,6 +1119,9 @@ attachment:
     - "child2_past_addresses_on_one_line": ${ children_of_both.item(1).previous_addresses if not confidential_address else '' }
     - "child3_past_addresses_on_one_line": ${ children_of_both.item(2).previous_addresses if not confidential_address else '' }
     - "child4_past_addresses_on_one_line": ${ children_of_both.item(3).previous_addresses if not confidential_address else '' }
+    - "child2_same_address_as_child1": ${ not confidential_address and children_of_both.item(1).address.on_one_line(include_unit=True) == children_of_both.item(0).address.on_one_line(include_unit=True) }
+    - "child3_same_address_as_child1": ${ not confidential_address and children_of_both.item(2).address.on_one_line(include_unit=True) == children_of_both.item(0).address.on_one_line(include_unit=True) }
+    - "child4_same_address_as_child1": ${ not confidential_address and children_of_both.item(3).address.on_one_line(include_unit=True) == children_of_both.item(0).address.on_one_line(include_unit=True) }
     - "has_participated_custody_case": ${ custody_case_participation == "participated" }
     - "dont_know_any_custody_cases": ${ custody_case_participation == "no cases" }
     - "know_of_other_custody_case": ${ custody_case_participation == "know of" }
@@ -1214,7 +1218,7 @@ attachment:
         % endif
     - "child2_address1_start_date": |
         % if not confidential_address:
-        ${ children_of_both.item(1).previous_addresses.item(0).start_date }
+        ${ children_of_both.item(1).address.start_date }
         % endif
     - "child2_address2_adults_lives_with": |
         % if not confidential_address:
@@ -1290,9 +1294,9 @@ attachment:
         % endif
     - "child4_address2_adults_lives_with": |
         % if not confidential_address:
-        ${ children_of_both.item(3).lives_with } - 
+        ${ children_of_both.item(3).previous_addresses.item(0).lives_with } - 
 
-        ${ children_of_both.item(3).relationship }
+        ${ children_of_both.item(3).previous_addresses.item(0).relationship }
         % endif
     - "child4_address2_end_date": |
         % if not confidential_address:
@@ -1300,7 +1304,7 @@ attachment:
         % endif
     - "child4_address2_start_date": |
         % if not confidential_address:
-        ${ children_of_both.item(3).address.start_date }
+        ${ children_of_both.item(3).previous_addresses.item(0).start_date }
         % endif
     - "child4_name_full": |
         ${ children_of_both.item(3) }
@@ -1343,10 +1347,10 @@ attachment:
     - "other_case_other_parties_4_names": ${ others_in_proceedings.item(3) }
     - "not_signer_is_attorney": ${ not attorneys.there_are_any or not attorneys.is_petitioner_minor_or_incompetent} 
     - "signer_is_attorney": ${ attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent}
-    - "signer_is_attorney__1": ${ attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent}
+    - "signer_is_attorney_1": ${ attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent}
     - "trial_court_division": ${ trial_court.division }
     - "users1_address_block": ${ users[0].address.block() }
-    - "users1_address_on_one_line__1": ${ users[0].address.on_one_line(include_unit=True) }
+    - "users1_address_on_one_line_1": ${ users[0].address.on_one_line(include_unit=True) }
     - "users1_email": ${ users[0].email }
     - "users1_phone_numbers": ${ users[0].phone_numbers() }
     - "users1_signature": |
@@ -1377,7 +1381,7 @@ attachment:
         ${ attorneys[0] }
         % endif
     - "signature_date": ${ signature_date }
-    - "signature_date__1": ${ signature_date }
+    - "signature_date_1": ${ signature_date }
 ---
 id: care or custody intro
 continue button field: affidavit_disclosing_care_or_custody_intro
