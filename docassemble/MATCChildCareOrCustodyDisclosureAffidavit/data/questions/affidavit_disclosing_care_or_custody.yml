@@ -352,17 +352,21 @@ fields:
   - code: other_parties[i].name_fields()
 ---
 code: |
-  # court_name = getattr(trial_court, 'name', '') or ''
-  # if 'District' in court_name:
-  #   trial_court.division_district_court = getattr(trial_court, 'division', '')
-  # elif 'Superior' in court_name:
-  #   trial_court.division_superior_court = getattr(trial_court, 'division', '')
-  # elif 'Juvenile' in court_name:
-  #   trial_court.division_juvenile_court = getattr(trial_court, 'division', '')
-  # elif 'Probate' in court_name:
-  #   trial_court.division_family_court = getattr(trial_court, 'division', '')
-  # elif 'Municipal' in court_name: 
-  #   trial_court.division_bmc = getattr(trial_court, 'division', '')
+  other_parties[i].name.first
+  other_parties[i].complete = True
+---
+code: |
+  court_name = getattr(trial_court, 'name', '') or ''
+  if 'District' in court_name:
+    trial_court.division_district_court = getattr(trial_court, 'division', '')
+  elif 'Superior' in court_name:
+    trial_court.division_superior_court = getattr(trial_court, 'division', '')
+  elif 'Juvenile' in court_name:
+    trial_court.division_juvenile_court = getattr(trial_court, 'division', '')
+  elif 'Probate' in court_name:
+    trial_court.division_family_court = getattr(trial_court, 'division', '')
+  elif 'Municipal' in court_name: 
+    trial_court.division_bmc = getattr(trial_court, 'division', '')
   fill_in_court_name = True
 ---
 code: |

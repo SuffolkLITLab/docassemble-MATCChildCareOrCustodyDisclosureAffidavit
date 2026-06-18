@@ -137,7 +137,7 @@ objects:
   - guardians: ALPeopleList.using(there_are_any=True, complete_attribute="complete")
   - requested_guardians: ALPeopleList.using(maximum_number=2, complete_attribute="complete")
   - attorneys: ALPeopleList.using(complete_attribute="complete")
-  - other_parties: ALPeopleList.using(there_are_any=False)
+  - other_parties: ALPeopleList.using(there_are_any=False, complete_attribute="complete")
 ---
 id: intro
 continue button field: intro
