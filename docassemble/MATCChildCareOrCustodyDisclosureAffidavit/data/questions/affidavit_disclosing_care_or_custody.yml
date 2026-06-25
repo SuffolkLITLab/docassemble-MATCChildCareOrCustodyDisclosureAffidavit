@@ -94,7 +94,7 @@ code: |
 #################### Object/Code Blocks Start #####################
 ---
 code: |
-  if len(attorneys):
+  if defined("attorneys.there_are_any") and attorneys.there_are_any:
     signing_attorney.name.first = attorneys[0].name.first
     signing_attorney.name.last = attorneys[0].name.last
     signing_attorney.name.middle = attorneys[0].name.middle
@@ -119,6 +119,35 @@ code: |
     no_attorney = True
 
   set_party_name = True
+---
+code: |
+  def attorney_is_signing_for_party():
+    return (
+      defined("attorneys.there_are_any")
+      and attorneys.there_are_any
+      and defined("attorneys.is_petitioner_minor_or_incompetent")
+      and attorneys.is_petitioner_minor_or_incompetent
+    )
+
+  def safe_attorney_signature_if_final(iteration):
+    if not attorney_is_signing_for_party():
+      return ''
+    return attorneys[0].signature_if_final(iteration)
+
+  def safe_attorney_signature_text():
+    if not attorney_is_signing_for_party():
+      return ''
+    return f"/s/{ attorneys[0] }"
+
+  def safe_attorney_bbo():
+    if not attorney_is_signing_for_party():
+      return ''
+    return attorneys[0].bbo_number
+
+  def safe_attorney_name():
+    if not attorney_is_signing_for_party():
+      return ''
+    return attorneys[0]
 ---
 code: |
   if (not confidential_address) and (not ask_impound_affidavit):
@@ -1431,25 +1460,13 @@ attachment:
             % if esign and not (attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent):
             /s/${ users[0] }
             % endif
-    - "attorneys1_signature": |
-            % if attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent and not esign:
-            ${ attorneys[0].signature_if_final(i) }
-            % endif
-    - "attorneys1_signature_text": |
-            % if attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent and esign:
-            /s/${ attorneys[0] }
-            % endif
+    - "attorneys1_signature": ${ safe_attorney_signature_if_final(i) if not esign else '' }
+    - "attorneys1_signature_text": ${ safe_attorney_signature_text() if esign else '' }
     - "trial_court_division": ${ getattr(trial_court, 'division', '') }
     - "party_name_attorney": ${ party_name_attorney }
     - "party_name_no_attorney": ${ party_name_no_attorney }
-    - "attorneys1_bbo": |
-        % if attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent:
-        ${ attorneys[0].bbo_number }
-        % endif
-    - "attorneys1_name_full": |
-        % if attorneys.there_are_any and attorneys.is_petitioner_minor_or_incompetent:
-        ${ attorneys[0] }
-        % endif
+    - "attorneys1_bbo": ${ safe_attorney_bbo() }
+    - "attorneys1_name_full": ${ safe_attorney_name() }
     - "signature_date": ${ signature_date }
     - "signature_date_1": ${ signature_date }
 ---
