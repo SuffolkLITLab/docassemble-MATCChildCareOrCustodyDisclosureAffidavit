@@ -94,16 +94,16 @@ code: |
 #################### Object/Code Blocks Start #####################
 ---
 code: |
-  if len(attorneys):
+  if attorneys.number_gathered() > 0:
     signing_attorney.name.first = attorneys[0].name.first
-    signing_attorney.name.last = attorneys[0].name.last
-    signing_attorney.name.middle = attorneys[0].name.middle
-    signing_attorney.name.suffix = attorneys[0].name.suffix
-    signing_attorney.address.address = attorneys[0].address.address
-    signing_attorney.address.unit = attorneys[0].address.unit
-    signing_attorney.address.city = attorneys[0].address.city
-    signing_attorney.address.state = attorneys[0].address.state
-    signing_attorney.address.zip = attorneys[0].address.zip
+    signing_attorney.name.last = showifdef("attorneys[0].name.last")
+    signing_attorney.name.middle = showifdef("attorneys[0].name.middle")
+    signing_attorney.name.suffix = showifdef("attorneys[0].name.suffix")
+    signing_attorney.address.address = showifdef("attorneys[0].address.address")
+    signing_attorney.address.unit = showifdef("attorneys[0].address.unit")
+    signing_attorney.address.city = showifdef("attorneys[0].address.city")
+    signing_attorney.address.state = showifdef("attorneys[0].address.state")
+    signing_attorney.address.zip = showifdef("attorneys[0].address.zip")
 
   set_signing_attorney = True
 ---
