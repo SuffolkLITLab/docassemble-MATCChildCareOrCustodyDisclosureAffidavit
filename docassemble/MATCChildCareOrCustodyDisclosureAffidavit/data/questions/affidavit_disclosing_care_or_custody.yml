@@ -660,7 +660,6 @@ fields:
     datatype: object_checkboxes
     choices: |
       children_of_both
-    none of the above: False
     minlength: 1
     show if:
       code: |
