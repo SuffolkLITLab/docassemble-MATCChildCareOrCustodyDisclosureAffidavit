@@ -623,7 +623,7 @@ code: |
 id: about the other care or custody proceeding
 need:
   - DCF
-  - other_care_custody_proceedings[i].children
+  - other_care_custody_proceedings[i].children.gathered
 question: |
   Tell us about the ${ordinal(i)} case involving ${comma_and_list(children_of_both, and_string=word("or"))}
 subquestion: |
