@@ -683,6 +683,8 @@ fields:
 ---
 id: select children in other care or custody proceeding
 if: len(children_of_both) > 1
+sets:
+  - other_care_custody_proceedings[i].children.gathered
 question: |
   Which children were involved in the ${ordinal(i)} case?
 fields:
