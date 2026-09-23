@@ -620,7 +620,14 @@ code: |
 code: |
   other_care_custody_proceedings.there_are_any = has_participated_custody_case or know_of_other_custody_case
 ---
+comment: |
+  Two versions of this screen, for more than one child and for one child. The
+  children checkboxes used to be hidden with a code "show if" when there was
+  one child, and Docassemble's API cannot serialize a hidden checkbox field
+  that sets "none of the above" (KeyError in as_data). The one-child version
+  leaves the field out; its validation code assigns the only child.
 id: about the other care or custody proceeding
+if: len(children_of_both) > 1
 need: DCF
 question: |
   Tell us about the ${ordinal(i)} case involving ${comma_and_list(children_of_both, and_string=word("or"))}
@@ -662,9 +669,73 @@ fields:
       children_of_both
     none of the above: False
     minlength: 1
-    show if:
-      code: |
-        len(children_of_both) > 1
+  - What was your role in this case?: other_care_custody_proceedings[i].user_role
+    datatype: radio
+    choices:
+      - Witness: W
+      - Party: P
+      - Other: O
+      - I was not involved: N
+    default: ${'N' if not has_participated_custody_case else ''}
+    hide if:
+      variable: other_care_custody_proceedings[i].case_status
+      is: adoption
+  - Who else was part of this case?: other_care_custody_proceedings[i].other_party_types
+    datatype: checkboxes
+    choices:
+      # - ${other_parties.familiar()}: defendant
+      - Department of Children and Families: dcf
+      - Someone else (like a grandparent): other
+  - Is this case still open?: other_care_custody_proceedings[i].is_open
+    datatype: yesnoradio
+    help: |
+      Answer "yes" if the case is still ongoing. Choose no if a judge made a final decision,
+      even if you or another person plans to appeal it.  
+validation code: |
+  # We don't ask the user to select which minor is in the case if
+  # there is only one child. Below code adds the minor to the appropriate
+  # list so we can write more general code.
+  if len(children_of_both) == 1:
+    other_care_custody_proceedings[i].children = children_of_both
+
+---
+id: about the other care or custody proceeding for one child
+if: len(children_of_both) <= 1
+need: DCF
+question: |
+  Tell us about the ${ordinal(i)} case involving ${comma_and_list(children_of_both, and_string=word("or"))}
+subquestion: |
+  Include the best information you know. You can skip sections without an asterisk like this (<span class="text-danger">*</span>) if you don't know or remember the answer.
+
+  Only include information about cases that involve ${ children[0].familiar() if len(children.complete_elements()) > 0 else f"the minor" }.
+
+  You will have a chance to add more cases later.
+fields:
+  - What is the best description of this case? You do not need the exact name.: other_care_custody_proceedings[i].case_status
+    choices:
+      - A 209A restraining order: a 209A restraining order
+      - Adoption: adoption
+      - Annulment: annulment
+      - Care and protection: care and protection
+      - Child Requiring Assistance (CRA): CRA
+      - Custody/Support/Parenting time: custody/support/parenting time
+      - Custody/Support/Visitation: custody/support/visitation
+      - Complaint to establish paternity: paternity
+      - Divorce: divorce
+      - Guardianship: guardianship
+      - Separate support or other legal separation: separate support or legal separation
+      - Other: other
+  - This case happened outside of Massachusetts: other_care_custody_proceedings[i].non_ma_court
+    datatype: yesno
+  - Name of court this case was filed in: other_care_custody_proceedings[i].court_name
+    show if: other_care_custody_proceedings[i].non_ma_court
+  - Name of court this case was filed in: other_care_custody_proceedings[i].court_name
+    hide if: other_care_custody_proceedings[i].non_ma_court
+    datatype: combobox
+    code: |
+      sorted((set([str(y) for y in all_courts.filter_courts(["District Court","Boston Municipal Court", "Probate and Family Court", "Superior Court", "Juvenile Court"])])))
+  - Docket number: other_care_custody_proceedings[i].docket_number
+    required: False
   - What was your role in this case?: other_care_custody_proceedings[i].user_role
     datatype: radio
     choices:
