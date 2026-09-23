@@ -766,6 +766,17 @@ validation code: |
     other_care_custody_proceedings[i].children = children_of_both
 
 ---
+comment: |
+  With one child, the case always involves that child. The one-child screen's
+  validation code sets this in the browser; this block covers any other way
+  the screen is answered, such as the API, which does not run validation code.
+code: |
+  if len(children_of_both) <= 1:
+    for only_child in children_of_both:
+      if only_child not in other_care_custody_proceedings[i].children:
+        other_care_custody_proceedings[i].children.append(only_child)
+    other_care_custody_proceedings[i].children.gathered = True
+---
 code: |
   other_care_custody_proceedings[i].other_parties.there_are_any = other_care_custody_proceedings[i].other_party_types["other"]
 ---
