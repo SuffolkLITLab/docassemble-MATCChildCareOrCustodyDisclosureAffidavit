@@ -339,7 +339,7 @@ code: |
 sets:
   - other_parties[i].name.first
   - other_parties[i].name.last
-id: name of other party
+id: name of other party in a case
 question: |
   What is the name of the person on the other side of this case?
 subquestion: |
