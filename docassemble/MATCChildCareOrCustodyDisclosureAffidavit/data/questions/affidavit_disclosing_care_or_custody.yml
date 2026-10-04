@@ -216,6 +216,8 @@ fields:
     datatype: area
     rows: 2
   - What is the relationship of the person or people to ${children[i]}?: children[i].relationship
+    help: |
+      For example: "mother and stepfather" or "grandmother".
     datatype: area
     rows: 2
 ---
@@ -227,6 +229,8 @@ fields:
     datatype: area
     rows: 2
   - What is the relationship of the person or people to ${children[i]}?: children[i].relationship
+    help: |
+      For example: "mother and stepfather" or "grandmother".
     datatype: area
     rows: 2
   - When did ${ children[i].familiar() } start living at this address?: children[i].lived_here_since
@@ -447,6 +451,8 @@ fields:
     default: |
       ${ showifdef(children[-1].attr_name("lives_with")) }
   - What is the relationship of the person or people to ${children[i]}?: children[i].relationship
+    help: |
+      For example: "mother and stepfather" or "grandmother".
     datatype: area
     rows: 2
     default: |
@@ -464,6 +470,8 @@ fields:
     default: |
       ${ showifdef(children[-1].attr_name("lives_with")) }
   - What is the relationship of the person or people to ${children[i]}?: children[i].relationship
+    help: |
+      For example: "mother and stepfather" or "grandmother".
     datatype: area
     rows: 2
     default: |
@@ -568,6 +576,9 @@ fields:
     field: needs_attorney_signature
     label above field: True
     datatype: yesnoradio
+    help: |
+      "Incompetent" here means a court has found the person unable to make their
+      own legal decisions. Most people answer No.
 ---
 id: attorney signing address
 question: |
@@ -964,12 +975,26 @@ subquestion: |
   Did a judge in any U.S. state ever appoint an:
   
   * attorney
-  * guardian ad litem, sometimes called a GAL
-  * probation officer
-  * investigator, or 
-  * evaluator
+  * {guardian ad litem}, sometimes called a GAL
+  * {probation officer}
+  * {investigator}, or 
+  * {evaluator}
 
   to represent or work on behalf of ${ children[i].familiar(unique_names=users) }?
+
+  Tap a green word to see what it means.
+terms:
+  guardian ad litem: |
+    A person the court appoints in a case to look out for a child's interests,
+    for example by investigating the family's situation and reporting to the judge.
+  probation officer: |
+    A court employee who may meet with the family and report back to the judge.
+  investigator: |
+    Someone the court appoints to gather facts about the family and report them
+    to the judge.
+  evaluator: |
+    A professional, such as a psychologist, whom the court appoints to evaluate a
+    child or family and report to the judge.
 fields:
   - Did a judge appoint anyone?: children[i].has_gal
     datatype: yesnomaybe
