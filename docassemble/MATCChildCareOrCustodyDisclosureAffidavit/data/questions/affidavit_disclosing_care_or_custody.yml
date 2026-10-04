@@ -613,8 +613,9 @@ subquestion: |
   * juvenile delinquency
   * DCF case involving care and protection
 
-  Answer yes even if the judge did not make a decision about custody.
-  We'll ask you more about any cases in the next few questions.
+  Count a case even if the judge did not make a decision about custody. If you
+  know about a case like this, choose one of the first two options. We'll ask
+  you more about any cases in the next few questions.
 fields:
   - no label: custody_case_participation
     datatype: radio
