@@ -206,9 +206,12 @@ fields:
     disable others: True
   - code: |
       children[i].address.address_fields()
-  - When did ${children_of_both.familiar()} start living at this address?: children[0].address.start_date
+  - When did ${ children[i].familiar() } start living at this address?: children[i].lived_here_since
     validate: include_a_year
     maxlength: 12
+    help: |
+      Month and year, for example 06/2019. If ${ children[i].familiar() } was born
+      after you moved in, use the month and year they were born.
   - Who does ${children[i]} live with at this address?: children[i].lived_with
     datatype: area
     rows: 2
@@ -226,9 +229,12 @@ fields:
   - What is the relationship of the person or people to ${children[i]}?: children[i].relationship
     datatype: area
     rows: 2
-  - When did ${children_of_both.familiar()} start living at this address?: children[0].address.start_date
+  - When did ${ children[i].familiar() } start living at this address?: children[i].lived_here_since
     validate: include_a_year
     maxlength: 12
+    help: |
+      Month and year, for example 06/2019. If ${ children[i].familiar() } was born
+      after you moved in, use the month and year they were born.
 ---
 id: addresses of children explanation
 question: |
@@ -271,7 +277,7 @@ fields:
     maxlength: 12
   - End date: children[i].previous_addresses[j].end_date
     maxlength: 12
-    default: ${ children[i].address.start_date if i == 0 else "" }
+    default: ${ children[i].lived_here_since if i == 0 else "" }
   - Address: children[i].previous_addresses[j].address
     address autocomplete: True
   - Unit: children[i].previous_addresses[j].unit
@@ -429,9 +435,12 @@ fields:
       is: USA
   - Country: children[i].address.country
     default: USA
-  - ${ children[i].familiar() } has lived here since: children[i].address.start_date
+  - ${ children[i].familiar() } has lived here since: children[i].lived_here_since
     validate: include_a_year
     maxlength: 12
+    help: |
+      Month and year, for example 06/2019. If ${ children[i].familiar() } was born
+      after you moved in, use the month and year they were born.
   - Who does ${children[i]} live with?: children[i].lives_with
     datatype: area
     rows: 2
@@ -459,9 +468,12 @@ fields:
     rows: 2
     default: |
       ${ showifdef(children[-1].attr_name("relationship")) }
-  - ${ children[i].familiar() } has lived here since: children[i].address.start_date
+  - ${ children[i].familiar() } has lived here since: children[i].lived_here_since
     validate: include_a_year
     maxlength: 12
+    help: |
+      Month and year, for example 06/2019. If ${ children[i].familiar() } was born
+      after you moved in, use the month and year they were born.
 ---
 code: |
   # Ask the user if they want the affidavit impounded ONLY if they have an
@@ -1344,7 +1356,7 @@ attachment:
         % endif
     - "child1_address1_start_date": |
         % if not confidential_address:
-        ${ children_of_both.item(0).address.start_date }
+        ${ children_of_both.item(0).lived_here_since }
         % endif
     - "child1_address2_adults_lives_with": |
         % if not confidential_address:
@@ -1370,7 +1382,7 @@ attachment:
         % endif
     - "child2_address1_start_date": |
         % if not confidential_address:
-        ${ children_of_both.item(1).address.start_date }
+        ${ children_of_both.item(1).lived_here_since }
         % endif
     - "child2_address2_adults_lives_with": |
         % if not confidential_address:
@@ -1408,7 +1420,7 @@ attachment:
         % endif
     - "child3_address1_start_date": |
         % if not confidential_address:
-        ${ children_of_both.item(2).address.start_date }
+        ${ children_of_both.item(2).lived_here_since }
         % endif
     - "child4_address1_end_date": |
         % if not confidential_address and children_of_both.item(3):
@@ -1442,7 +1454,7 @@ attachment:
         % endif
     - "child4_address1_start_date": |
         % if not confidential_address:
-        ${ children_of_both.item(3).address.start_date }
+        ${ children_of_both.item(3).lived_here_since }
         % endif
     - "child4_address2_adults_lives_with": |
         % if not confidential_address:
