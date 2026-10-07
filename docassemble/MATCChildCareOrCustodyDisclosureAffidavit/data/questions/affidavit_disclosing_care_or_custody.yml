@@ -463,7 +463,7 @@ fields:
       Month and year, for example 06/2019. If ${ children[i].familiar() } was born
       after you moved in, use the month and year they were born.
   - Who does ${children[i]} live with?: children[i].lives_with
-    input type: combobox
+    input type: datalist
     code: |
       aff_lives_with_choices()
     default: |
@@ -485,7 +485,7 @@ question: |
   Who does ${children[i]} live with?
 fields:
   - Who does ${children[i]} live with?: children[i].lives_with
-    input type: combobox
+    input type: datalist
     code: |
       aff_lives_with_choices()
     default: |
