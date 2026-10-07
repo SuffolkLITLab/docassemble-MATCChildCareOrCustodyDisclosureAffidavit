@@ -328,6 +328,9 @@ code: |
   # We use dict.setdefault method here so that we never add
   # the same address twice. Hash will be address.on_one_line() output
   collected_addresses_temp.setdefault(users[0].address.on_one_line(include_unit=True), users[0].address)
+  # The other spouse's address, when the parent interview has it.
+  if defined('users[1].address.address') and users[1].address.address:
+    collected_addresses_temp.setdefault(users[1].address.on_one_line(include_unit=True), users[1].address)
   # collected_addresses_temp.setdefault(other_parties[0].address.on_one_line(include_unit=True), other_parties[0].address)
   for child in children_of_both:
     if defined('child.address.address') and len(child.address.address):
@@ -339,6 +342,20 @@ code: |
         if defined('add.address.address') and len(add.address.address):
           collected_addresses_temp.setdefault(add.on_one_line(include_unit=True), add)
   collected_addresses = list(collected_addresses_temp.values())
+---
+code: |
+  def aff_lives_with_choices():
+    """Quick answers for who a child lives with; the field still takes any text."""
+    names = [users[0].name.full()]
+    if defined("users[1].name.first"):
+      names.append(users[1].name.full())
+    choices = []
+    if len(names) == 2:
+      choices.append(f"{names[0]} and {names[1]}")
+    for name in names:
+      choices.append(name)
+      choices.append(f"{name} and the child's siblings")
+    return choices
 ---
 code: |
   have_pending_cases = len(other_care_custody_proceedings.filter(is_open=True)) > 0
@@ -446,10 +463,13 @@ fields:
       Month and year, for example 06/2019. If ${ children[i].familiar() } was born
       after you moved in, use the month and year they were born.
   - Who does ${children[i]} live with?: children[i].lives_with
-    datatype: area
-    rows: 2
+    input type: datalist
+    code: |
+      aff_lives_with_choices()
     default: |
       ${ showifdef(children[-1].attr_name("lives_with")) }
+    help: |
+      Pick a choice or type your own answer.
   - What is the relationship of the person or people to ${children[i]}?: children[i].relationship
     help: |
       For example: "mother and stepfather" or "grandmother".
@@ -465,10 +485,13 @@ question: |
   Who does ${children[i]} live with?
 fields:
   - Who does ${children[i]} live with?: children[i].lives_with
-    datatype: area
-    rows: 2
+    input type: datalist
+    code: |
+      aff_lives_with_choices()
     default: |
       ${ showifdef(children[-1].attr_name("lives_with")) }
+    help: |
+      Pick a choice or type your own answer.
   - What is the relationship of the person or people to ${children[i]}?: children[i].relationship
     help: |
       For example: "mother and stepfather" or "grandmother".
