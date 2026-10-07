@@ -328,6 +328,9 @@ code: |
   # We use dict.setdefault method here so that we never add
   # the same address twice. Hash will be address.on_one_line() output
   collected_addresses_temp.setdefault(users[0].address.on_one_line(include_unit=True), users[0].address)
+  # The other spouse's address, when the parent interview has it.
+  if defined('users[1].address.address') and users[1].address.address:
+    collected_addresses_temp.setdefault(users[1].address.on_one_line(include_unit=True), users[1].address)
   # collected_addresses_temp.setdefault(other_parties[0].address.on_one_line(include_unit=True), other_parties[0].address)
   for child in children_of_both:
     if defined('child.address.address') and len(child.address.address):
