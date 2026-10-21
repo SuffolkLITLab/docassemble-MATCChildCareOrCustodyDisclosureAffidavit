@@ -38,7 +38,7 @@ jobs:
       #### Developer note: You probably don't need this
       # Place the root directory in this branch to access
       # relative paths to action files
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: ALKiln - Start the isolated temporary docassemble server on GitHub
         id: github_server
